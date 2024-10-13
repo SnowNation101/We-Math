@@ -14,7 +14,7 @@ Under strict and loose conditions.
 # and output result CSV. It processes each model's results and calculates the evaluation metrics.
 """
 
-import pandas as pd
+import pandas as pd 
 import json
 import numpy as np
 import os
@@ -65,7 +65,6 @@ def calculate_metrics(merged_2steps, merged_3steps):
     metrics['steps3_filtered_rows_3'] = merged_3steps[((merged_3steps['joker_1'] == False) | (merged_3steps['joker_2'] == False) | (merged_3steps['joker_3'] == False)) & (merged_3steps['joker_multi'] == False)]
     metrics['steps3_filtered_rows_4_loose'] = merged_3steps[((merged_3steps['joker_1'] == True) | (merged_3steps['joker_2'] == True) | (merged_3steps['joker_3'] == True)) & (merged_3steps['joker_multi'] == True)]
     metrics['steps3_filtered_rows_4_strict'] = merged_3steps[((merged_3steps['joker_1'] == True) & (merged_3steps['joker_2'] == True) & (merged_3steps['joker_3'] == True)) & (merged_3steps['joker_multi'] == True)]
-    # metrics.to_csv("/Users/mac/Desktop/测试结果/error_anal/csv/gpt4o-0626.csv", index = False)
     return metrics
 
 # Function to compute evaluation rates and final scores
@@ -129,25 +128,21 @@ def evaluate_models(model_name, output_json, main_results_csv_path = None):
     main_results_df = update_main_results_df(main_results_df, model_name, total_counts, rates)
 
     print(main_results_df.to_string(index = False))
-    if main_results_csv_path is not None:
+
+    if main_results_csv_path:
         main_results_df.to_csv(main_results_csv_path, index=False)
         print("Evaluation completed and results saved to CSV.")
 
 # Argument parser for command-line execution
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Evaluate the performance of different LMMs on four-dimensional metrics.')
-    parser.add_argument('--model_name', type=str, required=True, help='Evaluation for multiple models or a single model')
-    parser.add_argument('--output_json', type=str, required=True, help='Directory containing the result JSON files.')
-    parser.add_argument('--main_results_csv_path', type=str, help='Path to save the main results CSV file.')
+    parser.add_argument('--model_name', default='LLaVA-NeXT', type=str, help='Evaluation for multiple models or a single model')
+    parser.add_argument('--output_json', default='output/llava-next-base.json', type=str, help='Directory containing the result JSON files.')
+    parser.add_argument('--main_results_csv_path', default='result/llava-next/four_dimensional_metrics.csv', type=str, help='Path to save the main results CSV file.')
     return parser.parse_args()
 
 # Main entry point
 if __name__ == "__main__":
     args = parse_arguments()
-    evaluate_models(args.model_name, args.output_json)
+    evaluate_models(args.model_name, args.output_json, args.main_results_csv_path)
 
-
-# python four_dimensional_metrics_refine.py --output_json /Users/mac/Desktop/kp/ --knowledge_structure_nodes_path /Users/mac/Desktop/测试结果/knowledge_structure_nodes.json --main_results_csv_path /Users/mac/Desktop/kp/main_result_refine.csv
-    
-# python ./evaluation/four_dimensional_metrics_refine.py --model_name LLaVA13BKP --output_json /Users/mac/Desktop/kp/LLaVA-13B.json 
-# python four_dimensional_metrics_refine.py --model_name GLLAVA13B --output_json /Users/mac/Desktop/no-kp/gllava-13b_0626.json

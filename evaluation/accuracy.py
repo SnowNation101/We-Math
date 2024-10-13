@@ -5,7 +5,7 @@ This script evaluates the performance of LMMs on One-Step / Two-Step / Three-Ste
 
 """
 
-import pandas as pd
+import pandas as pd 
 import json
 import numpy as np
 import os
@@ -104,15 +104,15 @@ def evaluate_models(model_name, output_json, knowledge_structure_nodes_path, mai
 # Argument parser for command-line execution
 def parse_arguments():
     parser = argparse.ArgumentParser(description='Evaluate the performance of different LMMs on four-dimensional metrics.')
-    parser.add_argument('--model_name', type=str, required=True, help='Model name.')
-    parser.add_argument('--output_json', type=str, required=True, help='Output json.')
-    parser.add_argument('--knowledge_structure_nodes_path', type=str, required=True, help='Path to the knowledge structure nodes JSON file.')
-    parser.add_argument('--main_results_csv_path', type=str, help='Path to save the main results CSV file.')
+    parser.add_argument('--model_name', default='LLaVA-NeXT', type=str, help='Model name.')
+    parser.add_argument('--output_json', default='output/llava-next-base.json', type=str, help='Output json.')
+    parser.add_argument('--knowledge_structure_nodes_path', default='data/knowledge_structure_nodes.json', type=str, help='Path to the knowledge structure nodes JSON file.')
+    parser.add_argument('--main_results_csv_path', default='result/llava-next/accuracy.csv', type=str, help='Path to save the main results CSV file.')
     return parser.parse_args()
 
 # Main entry point
 if __name__ == "__main__":
     args = parse_arguments()
-    evaluate_models(args.model_name, args.output_json, args.knowledge_structure_nodes_path)
+    evaluate_models(args.model_name, args.output_json, args.knowledge_structure_nodes_path, args.main_results_csv_path)
 
-# python ./evaluation/accuracy.py --model_name DeepSeek-VL-1.3B --output_json /Users/mac/Desktop/kp/test/DeepSeek-VL-1.3B.json --knowledge_structure_nodes_path ~/Desktop/测试结果/knowledge_structure_nodes.json
+    
